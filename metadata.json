@@ -1,0 +1,5 @@
+{
+  "name": "Admin Dashboard Pro",
+  "description": "A modern, responsive admin dashboard for managing users, subscriptions, access policies, and viewing usage metrics. Built with React, TypeScript, and Tailwind CSS.",
+  "requestFramePermissions": []
+}
