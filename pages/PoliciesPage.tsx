@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Policy } from '../types';
 import { policyService } from '../services/policy.service';
-import { MOCK_POLICIES } from '../constants';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
@@ -73,7 +72,6 @@ const PoliciesPage: React.FC = () => {
     const [policies, setPolicies] = useState<Policy[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [useMockData, setUseMockData] = useState(false);
 
     useEffect(() => {
         fetchPolicies();
@@ -85,31 +83,11 @@ const PoliciesPage: React.FC = () => {
             setError(null);
             
             const fetchedPolicies = await policyService.getAllPolicies();
-            
-            if (fetchedPolicies.length === 0) {
-                // Backend endpoint not implemented yet, use mock data with note
-                setUseMockData(true);
-                setPolicies(MOCK_POLICIES.map(p => ({
-                    ...p,
-                    effect: p.effect.toLowerCase() as 'allow' | 'deny',
-                    resource: p.resources?.[0] || '*',
-                    action: p.actions?.[0] || '*',
-                    priority: 100,
-                })));
-            } else {
-                setPolicies(fetchedPolicies);
-            }
+            setPolicies(fetchedPolicies);
         } catch (err: any) {
             console.error('Error fetching policies:', err);
-            // Use mock data on error
-            setUseMockData(true);
-            setPolicies(MOCK_POLICIES.map(p => ({
-                ...p,
-                effect: p.effect.toLowerCase() as 'allow' | 'deny',
-                resource: p.resources?.[0] || '*',
-                action: p.actions?.[0] || '*',
-                priority: 100,
-            })));
+            setError(err?.message || 'Failed to fetch policies');
+            setPolicies([]);
         } finally {
             setIsLoading(false);
         }
@@ -135,9 +113,9 @@ const PoliciesPage: React.FC = () => {
                 <div>
                     <h1 className="text-3xl font-bold">ABAC Policies</h1>
                     <p className="text-muted-foreground">Manage Attribute-Based Access Control rules.</p>
-                    {useMockData && (
-                        <p className="text-sm text-yellow-600 dark:text-yellow-400 mt-2">
-                            ⚠️ Showing demo policies. Backend endpoint not yet implemented for listing all policies.
+                    {error && (
+                        <p className="text-sm text-red-600 dark:text-red-400 mt-2">
+                            {error}
                         </p>
                     )}
                 </div>
