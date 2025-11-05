@@ -48,7 +48,7 @@ const AppContent: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-primary-dark">
+      <div className="min-h-screen flex items-center justify-center bg-background dark:bg-background-dark">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-lg text-muted-foreground">Loading...</p>
@@ -92,11 +92,11 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-primary-dark">
+    <div className="flex h-screen bg-background dark:bg-background-dark">
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header setSidebarOpen={setSidebarOpen} />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-primary-dark p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background dark:bg-background-dark p-4 sm:p-6 lg:p-8">
           {renderPage()}
         </main>
       </div>

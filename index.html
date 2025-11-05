@@ -9,40 +9,55 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             colors: {
+              // Material Design 3 inspired palette
               primary: {
-                DEFAULT: 'hsl(210 40% 96.1%)',
-                foreground: 'hsl(210 40% 98%)',
-                dark: 'hsl(222.2 47.4% 11.2%)',
+                DEFAULT: '#6750A4',          // Primary
+                foreground: '#FFFFFF',       // On Primary
+                dark: '#8F7DEB',             // Primary (dark emphasis)
               },
-              secondary: {
-                DEFAULT: 'hsl(210 40% 96.1%)',
-                foreground: 'hsl(222.2 47.4% 11.2%)',
+              background: {
+                DEFAULT: '#FFFBFE',          // Background (light)
               },
-              destructive: {
-                DEFAULT: 'hsl(0 100% 50%)',
-                foreground: 'hsl(210 40% 98%)',
+              foreground: {
+                DEFAULT: '#1C1B1F',          // On Background (light)
               },
-              muted: {
-                DEFAULT: 'hsl(210 40% 96.1%)',
-                foreground: 'hsl(215.4 16.3% 46.9%)',
-              },
-              accent: {
-                DEFAULT: 'hsl(210 40% 96.1%)',
-                foreground: 'hsl(222.2 47.4% 11.2%)',
-              },
+              // Dark theme counterparts
+              'background-dark': '#121212',   // MD dark background
+              'foreground-dark': '#E6E1E5',   // On background dark
+
               card: {
-                 DEFAULT: 'hsl(0 0% 100%)',
-                 foreground: 'hsl(222.2 47.4% 11.2%)',
+                DEFAULT: '#FFFFFF',
+                foreground: '#1C1B1F',
               },
-              border: 'hsl(214.3 31.8% 91.4%)',
-              input: 'hsl(214.3 31.8% 91.4%)',
+              'card-dark': '#1E1E1E',
+
+              muted: {
+                DEFAULT: '#E7E0EC',          // Surface variant
+                foreground: '#49454F',        // On surface variant
+              },
+              'muted-dark': '#2B2930',
+              'muted-dark-foreground': '#CAC4D0',
+
+              accent: {
+                DEFAULT: '#EADDFF',
+                foreground: '#1C1B1F',
+              },
+
+              destructive: {
+                DEFAULT: '#B3261E',
+                foreground: '#FFFFFF',
+              },
+
+              border: '#E7E0EC',
+              input: '#E7E0EC',
             },
             borderRadius: {
-              lg: `0.5rem`,
-              md: `calc(0.5rem - 2px)`,
+              lg: '0.5rem',
+              md: 'calc(0.5rem - 2px)',
               sm: 'calc(0.5rem - 4px)',
             },
           },
@@ -65,7 +80,7 @@
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-primary text-primary-dark">
+  <body class="bg-background text-foreground dark:bg-background-dark dark:text-foreground-dark">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
