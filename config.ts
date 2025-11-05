@@ -2,12 +2,14 @@
  * Application Configuration
  */
 
+import { env } from './env';
+
 export const config = {
   // Backend API base URL
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api',
+  apiBaseUrl: env.apiBaseUrl,
   
   // Frontend URL (for OAuth redirects)
-  frontendUrl: import.meta.env.VITE_FRONTEND_URL || 'http://localhost:3000',
+  frontendUrl: env.frontendUrl,
   
   // Token storage keys
   tokenKey: 'admin_access_token',
