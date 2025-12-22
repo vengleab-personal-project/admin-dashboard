@@ -17,12 +17,12 @@ class ApiService {
 
     // Request interceptor to add auth token
     this.api.interceptors.request.use(
-      (config: InternalAxiosRequestConfig) => {
+      (request: InternalAxiosRequestConfig) => {
         const token = localStorage.getItem(config.tokenKey);
-        if (token && config.headers) {
-          config.headers.Authorization = `Bearer ${token}`;
+        if (token && request.headers) {
+          request.headers.Authorization = `Bearer ${token}`;
         }
-        return config;
+        return request;
       },
       (error) => Promise.reject(error)
     );
@@ -57,7 +57,7 @@ class ApiService {
           } catch (refreshError) {
             // Refresh failed, logout user
             this.clearAuth();
-            window.location.href = '/login';
+            window.location.href = config.routes.login;
             return Promise.reject(refreshError);
           }
         }

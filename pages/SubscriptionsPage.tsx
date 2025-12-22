@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Subscription, User } from '../types';
+import { Subscription } from '../types';
 import { subscriptionService } from '../services/subscription.service';
-import { userService } from '../services/user.service';
 import Button from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '../components/ui/Card';
 import { CheckCircleIcon } from '../components/icons/IconComponents';
@@ -19,22 +18,35 @@ const SubscriptionsPage: React.FC = () => {
   }, []);
 
   const fetchSubscriptionData = async () => {
+    setIsLoading(true);
+    setError(null);
+
     try {
-      setIsLoading(true);
-      setError(null);
-      
-      const [subscription, limits, pricingData] = await Promise.all([
-        subscriptionService.getCurrentSubscription(),
-        subscriptionService.checkLimits(),
-        subscriptionService.getPricing(),
-      ]);
+      // Always load pricing so we can show subscription options
+      const pricingPromise = subscriptionService.getPricing();
+
+      let subscription: Subscription | null = null;
+      let limits: any = null;
+
+      try {
+        subscription = await subscriptionService.getCurrentSubscription();
+        limits = await subscriptionService.checkLimits();
+      } catch (err: any) {
+        // If user has no subscription yet (e.g. 404), we still want to show pricing
+        if (err?.response?.status !== 404) {
+          console.error('Error fetching current subscription or limits:', err);
+          throw err;
+        }
+      }
+
+      const pricingData = await pricingPromise;
 
       setCurrentSubscription(subscription);
       setSubscriptionLimits(limits);
       setPricing(pricingData.pricing);
     } catch (err: any) {
       console.error('Error fetching subscription data:', err);
-      setError(err.response?.data?.error || 'Failed to load subscription data');
+      setError(err?.response?.data?.error || 'Failed to load subscription data');
     } finally {
       setIsLoading(false);
     }

@@ -15,6 +15,9 @@ export const config = {
   tokenKey: 'admin_access_token',
   refreshTokenKey: 'admin_refresh_token',
   userKey: 'admin_user',
+  routes: {
+    login: '/auth/login',
+  },
 } as const;
 
 
