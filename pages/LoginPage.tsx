@@ -8,7 +8,7 @@ const LoginPage: React.FC = () => {
   const { login } = useAuth();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-primary-dark p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-background-dark p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl">Admin Dashboard</CardTitle>

@@ -170,7 +170,7 @@ const SubscriptionsPage: React.FC = () => {
                       <p className="text-lg">
                         {subscriptionLimits.usage.forms} / {subscriptionLimits.limits.forms}
                       </p>
-                      <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
                         <div 
                           className="bg-blue-600 h-2 rounded-full" 
                           style={{ width: `${Math.min(100, (subscriptionLimits.usage.forms / subscriptionLimits.limits.forms) * 100)}%` }}
@@ -182,7 +182,7 @@ const SubscriptionsPage: React.FC = () => {
                       <p className="text-lg">
                         {subscriptionLimits.usage.apiCalls.toLocaleString()} / {subscriptionLimits.limits.apiCalls.toLocaleString()}
                       </p>
-                      <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
                         <div 
                           className="bg-green-600 h-2 rounded-full" 
                           style={{ width: `${Math.min(100, (subscriptionLimits.usage.apiCalls / subscriptionLimits.limits.apiCalls) * 100)}%` }}

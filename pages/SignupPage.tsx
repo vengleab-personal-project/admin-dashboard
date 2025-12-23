@@ -40,7 +40,7 @@ const SignupPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-primary-dark">
+    <div className="min-h-screen bg-gray-100 dark:bg-background-dark text-gray-900 dark:text-foreground-dark">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12">
         <div className="container mx-auto px-4 text-center">
@@ -100,7 +100,7 @@ const SignupPage: React.FC = () => {
           <h2 className="text-3xl font-bold text-center mb-8">Why Choose Us?</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <div key={index} className="flex items-start gap-3 bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <div key={index} className="flex items-start gap-3 bg-white dark:bg-card-dark p-4 rounded-lg shadow">
                 <CheckCircleIcon className="h-6 w-6 text-green-500 flex-shrink-0 mt-1" />
                 <span className="text-lg">{feature}</span>
               </div>

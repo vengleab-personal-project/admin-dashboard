@@ -35,9 +35,7 @@ export interface UserStats {
   userId: string;
   formCount: number;
   fieldCount: number;
-  apiCallsThisMonth: number;
   totalApiCalls: number;
-  storageUsed: number;
   lastUpdated: string;
 }
 

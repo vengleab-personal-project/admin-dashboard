@@ -123,14 +123,14 @@ const UsersPage: React.FC = () => {
       </div>
       
       {users.length === 0 ? (
-        <div className="bg-card dark:bg-gray-800 shadow-md rounded-lg p-8 text-center">
+        <div className="bg-card dark:bg-card-dark shadow-md rounded-lg p-8 text-center">
           <p className="text-muted-foreground">No users found</p>
         </div>
       ) : (
-        <div className="bg-card dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+        <div className="bg-card dark:bg-card-dark shadow-md rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-muted-dark dark:text-gray-400">
                 <tr>
                   <th scope="col" className="px-6 py-3">User</th>
                   <th scope="col" className="px-6 py-3">Status</th>
@@ -142,7 +142,7 @@ const UsersPage: React.FC = () => {
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <tr key={user.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <tr key={user.id} className="bg-white border-b dark:bg-card-dark dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <div className="flex items-center space-x-3">
                         <img className="h-10 w-10 rounded-full" src={user.avatarUrl} alt={user.name} />
@@ -174,7 +174,7 @@ const UsersPage: React.FC = () => {
       {/* Add User Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowAddModal(false)}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-card-dark rounded-lg p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Add User</h2>
             <form onSubmit={handleAddUser} className="space-y-4">
               <div>
@@ -186,7 +186,7 @@ const UsersPage: React.FC = () => {
                   value={newUser.name}
                   onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
               
@@ -199,7 +199,7 @@ const UsersPage: React.FC = () => {
                   value={newUser.email}
                   onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -210,7 +210,7 @@ const UsersPage: React.FC = () => {
                 <select
                   value={newUser.role}
                   onChange={(e) => setNewUser({ ...newUser, role: e.target.value as any })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   <option value="user">User</option>
                   <option value="editor">Editor</option>
@@ -225,7 +225,7 @@ const UsersPage: React.FC = () => {
                 <select
                   value={newUser.subscriptionTier}
                   onChange={(e) => setNewUser({ ...newUser, subscriptionTier: e.target.value as any })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   <option value="free">Free</option>
                   <option value="pro">Pro</option>

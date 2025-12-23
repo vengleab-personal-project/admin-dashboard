@@ -58,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isSideba
         onClick={() => setSidebarOpen(false)}
       ></div>
       <aside
-        className={`fixed md:relative top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex-shrink-0 z-30 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed md:relative top-0 left-0 h-full w-64 bg-white dark:bg-card-dark border-r border-gray-200 dark:border-gray-700 flex-shrink-0 z-30 transform transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0`}
       >

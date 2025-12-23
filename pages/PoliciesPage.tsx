@@ -51,14 +51,14 @@ const PolicyCard: React.FC<{ policy: Policy }> = ({ policy }) => {
                 </div>
                 <div>
                     <h4 className="font-semibold">Resources</h4>
-                    <p className="font-mono bg-muted text-muted-foreground p-2 rounded-md mt-1 break-all text-xs">
+                    <p className="font-mono bg-muted dark:bg-muted-dark text-muted-foreground dark:text-muted-dark-foreground p-2 rounded-md mt-1 break-all text-xs">
                         {resources.join(', ')}
                     </p>
                 </div>
                 {policy.conditions && (
                     <div>
                         <h4 className="font-semibold">Conditions</h4>
-                        <pre className="font-mono bg-muted text-muted-foreground p-2 rounded-md mt-1 overflow-x-auto text-xs">
+                        <pre className="font-mono bg-muted dark:bg-muted-dark text-muted-foreground dark:text-muted-dark-foreground p-2 rounded-md mt-1 overflow-x-auto text-xs">
                             {JSON.stringify(policy.conditions, null, 2)}
                         </pre>
                     </div>
@@ -126,7 +126,7 @@ const PoliciesPage: React.FC = () => {
             </div>
 
             {policies.length === 0 ? (
-                <div className="bg-card shadow-md rounded-lg p-8 text-center">
+                <div className="bg-card dark:bg-card-dark shadow-md rounded-lg p-8 text-center">
                     <p className="text-muted-foreground">No policies found</p>
                 </div>
             ) : (

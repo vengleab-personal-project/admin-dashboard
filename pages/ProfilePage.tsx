@@ -99,7 +99,7 @@ const ProfilePage: React.FC = () => {
                       value={formData.avatar}
                       onChange={handleChange}
                       placeholder="Enter avatar URL"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                     <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                       Enter a URL to your profile picture
@@ -118,7 +118,7 @@ const ProfilePage: React.FC = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-muted-dark text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -193,19 +193,9 @@ const ProfilePage: React.FC = () => {
                 <p className="text-sm font-medium text-green-600 dark:text-green-400">Fields Generated</p>
                 <p className="text-3xl font-bold text-green-900 dark:text-green-100 mt-2">{stats.fieldCount}</p>
               </div>
-              <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                <p className="text-sm font-medium text-purple-600 dark:text-purple-400">API Calls (This Month)</p>
-                <p className="text-3xl font-bold text-purple-900 dark:text-purple-100 mt-2">{stats.apiCallsThisMonth}</p>
-              </div>
               <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
                 <p className="text-sm font-medium text-orange-600 dark:text-orange-400">Total API Calls</p>
                 <p className="text-3xl font-bold text-orange-900 dark:text-orange-100 mt-2">{stats.totalApiCalls}</p>
-              </div>
-              <div className="bg-pink-50 dark:bg-pink-900/20 p-4 rounded-lg">
-                <p className="text-sm font-medium text-pink-600 dark:text-pink-400">Storage Used</p>
-                <p className="text-3xl font-bold text-pink-900 dark:text-pink-100 mt-2">
-                  {(stats.storageUsed / 1024 / 1024).toFixed(2)} MB
-                </p>
               </div>
               <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Last Updated</p>

@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
   const avatarUrl = user?.avatar || user?.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=random`;
 
   return (
-    <header className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <header className="flex items-center justify-between p-4 bg-white dark:bg-card-dark border-b border-gray-200 dark:border-gray-700">
       <div className="flex items-center">
         <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setSidebarOpen(true)}>
           <MenuIcon className="h-6 w-6" />
@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
           <input
             type="text"
             placeholder="Search..."
-            className="pl-10 pr-4 py-2 w-64 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="pl-10 pr-4 py-2 w-64 border border-gray-300 rounded-md bg-white dark:bg-muted-dark dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
       </div>
@@ -74,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
           </div>
           
           {showUserMenu && (
-            <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 border dark:border-gray-700">
+            <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-card-dark rounded-md shadow-lg py-1 z-50 border dark:border-gray-700">
               <div className="px-4 py-2 border-b dark:border-gray-700">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white">{user?.name}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</p>
