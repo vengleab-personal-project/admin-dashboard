@@ -4,6 +4,7 @@ import { MenuIcon, SearchIcon, BellIcon, ChevronDownIcon } from '../icons/IconCo
 import Button from '../ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { Link } from '@tanstack/react-router';
 
 interface HeaderProps {
   setSidebarOpen: (open: boolean) => void;
@@ -83,18 +84,20 @@ const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
                   Tier: <span className="font-medium">{user?.subscriptionTier}</span>
                 </p>
               </div>
-              <button
-                onClick={() => { setShowUserMenu(false); window.location.hash = '#profile'; }}
+              <Link
+                to="/profile"
                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setShowUserMenu(false)}
               >
                 My Profile
-              </button>
-              <button
-                onClick={() => { setShowUserMenu(false); window.location.hash = '#sessions'; }}
+              </Link>
+              <Link
+                to="/sessions"
                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setShowUserMenu(false)}
               >
                 Active Sessions
-              </button>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
