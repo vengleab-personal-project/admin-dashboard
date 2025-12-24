@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '../components/ui/Card';
 import { UsersIcon, TrendingUpIcon, DollarSignIcon, CreditCardIcon, TrendingDownIcon } from '../components/icons/IconComponents';
 import { MetricCardData, ChartDataPoint } from '../types';
-import { usageService } from '../services/usage.service';
-import { subscriptionService } from '../services/subscription.service';
 import { userService } from '../services/user.service';
+import { usageService } from '../services/usage.service';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { useQuery } from '@tanstack/react-query';
 
 const MetricCard: React.FC<{ data: MetricCardData }> = ({ data }) => {
     const { title, value, change, changeType, icon: Icon } = data;
@@ -42,77 +42,92 @@ const ChartCard: React.FC<{ title: string; description: string; data: ChartDataP
 );
 
 const DashboardPage: React.FC = () => {
-    const [metrics, setMetrics] = useState<MetricCardData[]>([
-        { title: "Total Revenue", value: "$0", change: "+0%", changeType: 'increase', icon: DollarSignIcon },
-        { title: "Subscriptions", value: "0", change: "+0%", changeType: 'increase', icon: UsersIcon },
-        { title: "API Calls (Month)", value: "0", change: "0%", changeType: 'increase', icon: TrendingUpIcon },
-        { title: "Active Users", value: "0", change: "+0", changeType: 'increase', icon: CreditCardIcon },
-    ]);
-    const [apiUsageData, setApiUsageData] = useState<ChartDataPoint[]>([]);
-    const [billingData, setBillingData] = useState<ChartDataPoint[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const {
+        data: usageStats,
+        isLoading: isUsageLoading,
+        isFetching: isUsageFetching,
+        refetch: refetchUsage,
+    } = useQuery({
+        queryKey: ['usage-stats'],
+        queryFn: () => usageService.getUsageStats(),
+    });
 
-    useEffect(() => {
-        fetchDashboardData();
-    }, []);
+    const {
+        data: currentUser,
+        isLoading: isUserLoading,
+        isFetching: isUserFetching,
+        refetch: refetchUser,
+    } = useQuery({
+        queryKey: ['current-user'],
+        queryFn: () => userService.getCurrentUser(),
+    });
 
-    const fetchDashboardData = async () => {
-        try {
-            setIsLoading(true);
+    const isLoading = isUsageLoading || isUserLoading;
+    const isRefreshing = isUsageFetching || isUserFetching;
 
-            // Fetch usage stats
-            const usageStats = await usageService.getUsageStats();
-            const { stats: userStats } = await userService.getCurrentUser();
-            
-            // Update metrics with real data
-            setMetrics([
-                { 
-                    title: "Total Revenue", 
-                    value: "$0", // Would need billing endpoint
-                    change: "+0%", 
-                    changeType: 'increase', 
-                    icon: DollarSignIcon 
-                },
-                { 
-                    title: "Forms Created", 
-                    value: userStats.formCount.toString(), 
-                    change: `+${usageStats.formsCreated} this month`, 
-                    changeType: 'increase', 
-                    icon: UsersIcon 
-                },
-                { 
-                    title: "API Calls (Month)", 
-                    value: usageStats.apiCallsThisMonth.toLocaleString(), 
-                    change: `${usageStats.apiCallsThisMonth} total`, 
-                    changeType: 'increase', 
-                    icon: TrendingUpIcon 
-                },
-                { 
-                    title: "Fields Generated", 
-                    value: userStats.fieldCount.toString(), 
-                    change: `+${usageStats.fieldsGenerated} this month`, 
-                    changeType: 'increase', 
-                    icon: CreditCardIcon 
-                },
-            ]);
-
-            // For now, use mock data for charts (would need time-series endpoints)
-            setApiUsageData([
-                { name: 'Mon', uv: 4000 }, { name: 'Tue', uv: 3000 }, { name: 'Wed', uv: 2000 },
-                { name: 'Thu', uv: 2780 }, { name: 'Fri', uv: 1890 }, { name: 'Sat', uv: 2390 }, 
-                { name: 'Sun', uv: 3490 },
-            ]);
-
-            setBillingData([
-                { name: 'Jan', uv: 2400 }, { name: 'Feb', uv: 1398 }, { name: 'Mar', uv: 9800 },
-                { name: 'Apr', uv: 3908 }, { name: 'May', uv: 4800 }, { name: 'Jun', uv: 3800 },
-            ]);
-
-        } catch (error) {
-            console.error('Error fetching dashboard data:', error);
-        } finally {
-            setIsLoading(false);
+    const metrics: MetricCardData[] = useMemo(() => {
+        if (!usageStats || !currentUser) {
+            return [
+                { title: "Total Revenue", value: "$0", change: "+0%", changeType: 'increase', icon: DollarSignIcon },
+                { title: "Subscriptions", value: "0", change: "+0%", changeType: 'increase', icon: UsersIcon },
+                { title: "API Calls (Month)", value: "0", change: "0%", changeType: 'increase', icon: TrendingUpIcon },
+                { title: "Active Users", value: "0", change: "+0", changeType: 'increase', icon: CreditCardIcon },
+            ];
         }
+
+        const { stats: userStats } = currentUser;
+
+        return [
+            { 
+                title: "Total Revenue", 
+                value: "$0", // Would need billing endpoint
+                change: "+0%", 
+                changeType: 'increase', 
+                icon: DollarSignIcon 
+            },
+            { 
+                title: "Forms Created", 
+                value: userStats.formCount.toString(), 
+                change: `+${usageStats.formsCreated} this month`, 
+                changeType: 'increase', 
+                icon: UsersIcon 
+            },
+            { 
+                title: "API Calls (Month)", 
+                value: usageStats.apiCallsThisMonth.toLocaleString(), 
+                change: `${usageStats.apiCallsThisMonth} total`, 
+                changeType: 'increase', 
+                icon: TrendingUpIcon 
+            },
+            { 
+                title: "Fields Generated", 
+                value: userStats.fieldCount.toString(), 
+                change: `+${usageStats.fieldsGenerated} this month`, 
+                changeType: 'increase', 
+                icon: CreditCardIcon 
+            },
+        ];
+    }, [usageStats, currentUser]);
+
+    const apiUsageData: ChartDataPoint[] = useMemo(
+        () => [
+            { name: 'Mon', uv: 4000 }, { name: 'Tue', uv: 3000 }, { name: 'Wed', uv: 2000 },
+            { name: 'Thu', uv: 2780 }, { name: 'Fri', uv: 1890 }, { name: 'Sat', uv: 2390 }, 
+            { name: 'Sun', uv: 3490 },
+        ],
+        [],
+    );
+
+    const billingData: ChartDataPoint[] = useMemo(
+        () => [
+            { name: 'Jan', uv: 2400 }, { name: 'Feb', uv: 1398 }, { name: 'Mar', uv: 9800 },
+            { name: 'Apr', uv: 3908 }, { name: 'May', uv: 4800 }, { name: 'Jun', uv: 3800 },
+        ],
+        [],
+    );
+
+    const handleRefresh = async () => {
+        await Promise.all([refetchUsage(), refetchUser()]);
     };
 
     if (isLoading) {
@@ -131,10 +146,11 @@ const DashboardPage: React.FC = () => {
             <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-bold">Dashboard</h1>
                 <button
-                    onClick={fetchDashboardData}
-                    className="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90"
+                    onClick={handleRefresh}
+                    className="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-70"
+                    disabled={isRefreshing}
                 >
-                    Refresh
+                    {isRefreshing ? 'Refreshing...' : 'Refresh'}
                 </button>
             </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

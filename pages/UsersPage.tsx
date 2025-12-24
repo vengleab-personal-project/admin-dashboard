@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { User, UserStatus } from '../types';
 import { userService } from '../services/user.service';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import { MoreVerticalIcon, GoogleIcon, GitHubIcon } from '../components/icons/IconComponents';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { useQuery } from '@tanstack/react-query';
 
 const UsersPage: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newUser, setNewUser] = useState({
     name: '',
@@ -18,31 +16,23 @@ const UsersPage: React.FC = () => {
     subscriptionTier: 'free' as 'free' | 'pro' | 'enterprise',
   });
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  const {
+    data: users = [],
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ['users'],
+    queryFn: async () => {
       const fetchedUsers = await userService.getAllUsers();
-      
-      // Map backend data to match UI expectations
-      const mappedUsers = fetchedUsers.map(user => ({
+      return fetchedUsers.map(user => ({
         ...user,
         avatarUrl: user.avatar || user.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`,
         status: UserStatus.Active, // Backend doesn't have status, default to active
       }));
-      
-      setUsers(mappedUsers);
-    } catch (err: any) {
-      console.error('Error fetching users:', err);
-      setError(err.response?.data?.error || 'Failed to load users');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   const getStatusBadge = (status: UserStatus) => {
     switch (status) {
@@ -105,7 +95,7 @@ const UsersPage: React.FC = () => {
         <h1 className="text-3xl font-bold">Users</h1>
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
           <p className="text-red-800 dark:text-red-200">{error}</p>
-          <Button onClick={fetchUsers} className="mt-4">Retry</Button>
+          <Button onClick={() => refetch()} className="mt-4">Retry</Button>
         </div>
       </div>
     );
@@ -117,7 +107,9 @@ const UsersPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Users</h1>
         <div className="flex gap-2">
-          <Button onClick={fetchUsers} variant="outline">Refresh</Button>
+          <Button onClick={() => refetch()} variant="outline" disabled={isFetching}>
+            {isFetching ? 'Refreshing...' : 'Refresh'}
+          </Button>
           <Button onClick={() => setShowAddModal(true)}>Add User</Button>
         </div>
       </div>
