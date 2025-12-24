@@ -4,9 +4,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
 import { GoogleIcon, GitHubIcon, CheckCircleIcon } from '../components/icons/IconComponents';
 import { useAuth } from '../context/AuthContext';
 import Badge from '../components/ui/Badge';
+import { useTheme } from '../context/ThemeContext';
 
 const SignupPage: React.FC = () => {
   const { login } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const features = [
     'Free tier with 10 forms and 1,000 API calls',
@@ -40,14 +42,31 @@ const SignupPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-background-dark text-gray-900 dark:text-foreground-dark">
+    <div className="min-h-screen bg-background dark:bg-background-dark text-foreground dark:text-foreground-dark">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <div className="container mx-auto px-4 text-center relative">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-4 top-0 text-white hover:bg-white/10"
+            onClick={toggleTheme}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? (
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            ) : (
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            )}
+          </Button>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
             Welcome to Admin Dashboard
           </h1>
-          <p className="text-xl md:text-2xl mb-6 opacity-90">
+          <p className="text-xl md:text-2xl mb-6 opacity-90 text-white">
             Manage your forms, users, and subscriptions with powerful ABAC controls
           </p>
           <Badge variant="success" className="text-lg px-4 py-2">
@@ -156,7 +175,7 @@ const SignupPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6"
+              className="bg-white text-blue-700 hover:bg-white/90 hover:text-blue-800 text-lg px-8 py-6 shadow-md"
               onClick={() => login('google')}
             >
               <GoogleIcon className="h-6 w-6 mr-2" />
@@ -164,8 +183,8 @@ const SignupPage: React.FC = () => {
             </Button>
             <Button
               size="lg"
-              variant="outline"
-              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-6"
+              variant="ghost"
+              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-700 text-lg px-8 py-6"
               onClick={() => login('github')}
             >
               <GitHubIcon className="h-6 w-6 mr-2" />

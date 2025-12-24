@@ -20,14 +20,16 @@ export class AuthService {
    * Initiate Google OAuth login
    */
   loginWithGoogle(): void {
-    window.location.href = `${config.apiBaseUrl}/auth/google`;
+    const redirect = encodeURIComponent(window.location.origin);
+    window.location.href = `${config.apiBaseUrl}/auth/google?redirect=${redirect}`;
   }
 
   /**
    * Initiate GitHub OAuth login
    */
   loginWithGitHub(): void {
-    window.location.href = `${config.apiBaseUrl}/auth/github`;
+    const redirect = encodeURIComponent(window.location.origin);
+    window.location.href = `${config.apiBaseUrl}/auth/github?redirect=${redirect}`;
   }
 
   /**
