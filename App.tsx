@@ -1,53 +1,53 @@
-
-import React, { useState, useEffect } from 'react';
-import Sidebar from './components/layout/Sidebar';
-import Header from './components/layout/Header';
-import DashboardPage from './pages/DashboardPage';
-import UsersPage from './pages/UsersPage';
-import SubscriptionsPage from './pages/SubscriptionsPage';
-import PoliciesPage from './pages/PoliciesPage';
-import ProfilePage from './pages/ProfilePage';
-import SessionsPage from './pages/SessionsPage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import OAuthCallbackPage from './pages/OAuthCallbackPage';
-import { Page } from './types';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React, { useState } from "react";
+import Sidebar from "./components/layout/Sidebar";
+import Header from "./components/layout/Header";
+import DashboardPage from "./pages/DashboardPage";
+import UsersPage from "./pages/UsersPage";
+import SubscriptionsPage from "./pages/SubscriptionsPage";
+import PoliciesPage from "./pages/PoliciesPage";
+import ProfilePage from "./pages/ProfilePage";
+import SessionsPage from "./pages/SessionsPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import OAuthCallbackPage from "./pages/OAuthCallbackPage";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  createRouter,
+  createRoute,
+  createRootRoute,
+  RouterProvider,
+  Outlet,
+} from "@tanstack/react-router";
 
 const queryClient = new QueryClient();
 
-const AppContent: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<Page>('dashboard');
+const RootRoute = createRootRoute({
+  component: () => <Outlet />,
+});
+
+const LoginRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: "/login",
+  component: () => <LoginPage />,
+});
+
+const SignupRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: "/signup",
+  component: () => <SignupPage />,
+});
+
+const OAuthCallbackRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: "/auth/callback",
+  component: () => <OAuthCallbackPage />,
+});
+
+const AppLayout: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const { isAuthenticated, isLoading } = useAuth();
-
-  // Check if we're on special pages
-  const isOAuthCallback = window.location.pathname === '/auth/callback';
-  const isSignupPage = window.location.pathname === '/signup';
-  const isLoginPage = window.location.pathname === '/login';
-
-  useEffect(() => {
-    // Handle special pages
-    if (isOAuthCallback || isSignupPage || isLoginPage) {
-      return;
-    }
-
-    // Handle hash-based navigation
-    const handleHashChange = () => {
-      const hash = window.location.hash.substring(1);
-      if (hash === 'profile') {
-        setCurrentPage('profile');
-      } else if (hash === 'sessions') {
-        setCurrentPage('sessions');
-      }
-    };
-
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [isOAuthCallback, isSignupPage, isLoginPage]);
 
   if (isLoading) {
     return (
@@ -60,59 +60,93 @@ const AppContent: React.FC = () => {
     );
   }
 
-  // Show OAuth callback page
-  if (isOAuthCallback) {
-    return <OAuthCallbackPage />;
-  }
-
-  // Show signup page
-  if (isSignupPage) {
-    return <SignupPage />;
-  }
-
-  // Show login page
-  if (isLoginPage || !isAuthenticated) {
+  if (!isAuthenticated) {
     return <LoginPage />;
   }
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'dashboard':
-        return <DashboardPage />;
-      case 'users':
-        return <UsersPage />;
-      case 'subscriptions':
-        return <SubscriptionsPage />;
-      case 'policies':
-        return <PoliciesPage />;
-      case 'profile':
-        return <ProfilePage />;
-      case 'sessions':
-        return <SessionsPage />;
-      default:
-        return <DashboardPage />;
-    }
-  };
-
   return (
     <div className="flex h-screen bg-background dark:bg-background-dark">
-      <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <Sidebar isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header setSidebarOpen={setSidebarOpen} />
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background dark:bg-background-dark p-4 sm:p-6 lg:p-8">
-          {renderPage()}
+          <Outlet />
         </main>
       </div>
     </div>
   );
 };
 
+const AppRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  id: "app",
+  component: AppLayout,
+});
+
+const DashboardRoute = createRoute({
+  getParentRoute: () => AppRoute,
+  path: "/",
+  component: () => <DashboardPage />,
+});
+
+const UsersRoute = createRoute({
+  getParentRoute: () => AppRoute,
+  path: "/users",
+  component: () => <UsersPage />,
+});
+
+const SubscriptionsRoute = createRoute({
+  getParentRoute: () => AppRoute,
+  path: "/subscriptions",
+  component: () => <SubscriptionsPage />,
+});
+
+const PoliciesRoute = createRoute({
+  getParentRoute: () => AppRoute,
+  path: "/policies",
+  component: () => <PoliciesPage />,
+});
+
+const ProfileRoute = createRoute({
+  getParentRoute: () => AppRoute,
+  path: "/profile",
+  component: () => <ProfilePage />,
+});
+
+const SessionsRoute = createRoute({
+  getParentRoute: () => AppRoute,
+  path: "/sessions",
+  component: () => <SessionsPage />,
+});
+
+const routeTree = RootRoute.addChildren([
+  LoginRoute,
+  SignupRoute,
+  OAuthCallbackRoute,
+  AppRoute.addChildren([
+    DashboardRoute,
+    UsersRoute,
+    SubscriptionsRoute,
+    PoliciesRoute,
+    ProfileRoute,
+    SessionsRoute,
+  ]),
+]);
+
+const router = createRouter({ routeTree });
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
+
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <AppContent />
+          <RouterProvider router={router} />
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

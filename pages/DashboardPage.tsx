@@ -27,7 +27,7 @@ const MetricCard: React.FC<{ data: MetricCardData }> = ({ data }) => {
     );
 };
 
-const ChartCard: React.FC<{ title: string; description: string; data: ChartDataPoint[]; children: React.ReactNode }> = ({ title, description, children }) => (
+const ChartCard: React.FC<{ title: string; description: string; children: React.ReactNode }> = ({ title, description, children }) => (
     <Card className="col-span-1 lg:col-span-2">
         <CardHeader>
             <CardTitle>{title}</CardTitle>
